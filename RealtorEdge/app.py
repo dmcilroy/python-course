@@ -8,3 +8,7 @@ def My_Home_Page():
 @app.route('/about')
 def about_me():
     return 'This page is About Me'
+
+@app.route('/contact')
+def contact_us():
+    return 'Here are my contact details'
