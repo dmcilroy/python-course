@@ -2,8 +2,9 @@ from flask import Flask
 app = Flask(__name__)
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def My_Home_Page():
+    return 'My Home Page'
+    
 @app.route('/about')
 def about_me():
-    return 'About Me'
+    return 'This page is About Me'
