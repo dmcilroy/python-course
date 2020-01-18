@@ -4,3 +4,4 @@ These are changes
 I am adding some other notes to the file
 I am in the network mode
 testing the access to git
+I'm making a change to my readme
