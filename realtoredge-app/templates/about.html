@@ -1,1 +1,21 @@
 {% extends "base.html" %}
+
+{% block content %}
+
+<div class="container">
+    <div class="customstyle">
+      <div class="row">
+          
+        <div class="col-md">
+            <div class="jumbotron">
+                <h1 class="display-4">This page is about RealtorEdge</h1>
+                <p class="lead">If I did this correctly this text will appear in a jumbotron.</p>
+                <hr class="my-4">
+                <p>This is a placeholder for more info on about the web site.</p>
+                <a class="btn btn btn-success btn-lg" href="#" role="button">Learn more</a>
+            </div>
+        </div>
+        </div>
+
+{{super()}}
+{% endblock %}
