@@ -5,3 +5,8 @@
     padding-top: 8px;
     padding-bottom: 8px;
 }
+
+#mymap {
+    height: 1000px !important;
+    width: 100% !important;
+}

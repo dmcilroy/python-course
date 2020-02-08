@@ -1,6 +1,5 @@
 import requests
 import csv
-
 def get_realtor_data():
     url = 'https://api2.realtor.ca/Listing.svc/PropertySearch_Post'
     
@@ -16,7 +15,6 @@ def get_realtor_data():
         'PropertySearchTypeId': 1,
         'RecordsPerPage': 50
     }
-
     r = requests.post(url, opts)
     data = r.json()
     
@@ -33,19 +31,17 @@ def get_realtor_data():
             "Latitude": listing["Property"]["Address"]["Latitude"],
             "Longitude": listing["Property"]["Address"]["Longitude"],
             "Price": listing["Property"]["Price"],
-#             "LowResPath": listing["Property"]["Photo"][0]["LowResPath"] if listing["Property"]["Photo"] else 'Photo Not Available'
+            "LowResPath": listing["Property"]["Photo"][0]["LowResPath"] if "Photo" in listing["Property"] else 'Photo Not Available'
         }
         properties.append(filtered_dictionary)
     return properties
-
 def get_csv_data(filepath):
     assessment_data = []
-    with open(filepath, mode="r", newline="") as inputfile:
-        data = csv.DictReader(inputfile, delimiter=',')
-        for eachRow in data:
-            assessment_data.append(eachRow)
+    with open(filepath, newline='') as csvfile:
+        data = csv.DictReader(csvfile)
+        for row in data:
+            assessment_data.append(row)
     return assessment_data
-
 def calc_difference(realtor_price, assessment_price):
     # Convert assessment_price to an integer
     assessment_price = int(assessment_price)
@@ -55,7 +51,6 @@ def calc_difference(realtor_price, assessment_price):
     
     # Subtract and return the difference
     return realtor_price - assessment_price
-
 def match_properties(realtor_listing, assessment_data, writer):
     # First parse the realtor property address into components
     realtor_address = realtor_listing["Address"].split("|")[0]
@@ -70,7 +65,6 @@ def match_properties(realtor_listing, assessment_data, writer):
     
     # Then compare the realtor and city house numbers
     filtered_by_house = []
-
     for property in assessment_data:
         if property["HOUSE"] == realtor_house:
             filtered_by_house.append(property)
@@ -105,7 +99,7 @@ def match_properties(realtor_listing, assessment_data, writer):
             'Latitude': realtor_listing['Latitude'],
             'Longitude': realtor_listing['Longitude'],
             'Price': realtor_listing['Price'],
-#             'LowResPath': realtor_listing['LowResPath'],
+            'LowResPath': realtor_listing['LowResPath'],
             'Assessment': realtor_listing['Assessment'],
             'Inflatedvalue': realtor_listing['Inflatedvalue']
             }
@@ -115,23 +109,20 @@ def match_properties(realtor_listing, assessment_data, writer):
         print('No city data found for address:', realtor_address)
         
 def main():
-    filepath = 'data/assessment2020.csv'
+    filepath = 'data/assessment2020.csv'  # Note change to 'data/assessment2020.csv' in VS Code
     city_data = get_csv_data(filepath)
     realtor_data = get_realtor_data()
     
-    outputfile = 'data/property-analysis.csv'
+    outputfile = 'data/property-analysis.csv' # Note change to 'data/property-analysis.csv' in VS Code
     
     column_names = ['ListingUrl', 'Type', 'SizeInterior', 'Address', 'PostalCode', 'Latitude', 'Longitude', 'Price', 'LowResPath', 'Assessment', 'Inflatedvalue']
     
     with open(outputfile, 'w', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=column_names)
         writer.writeheader()
-
-
         for property in realtor_data:
             match_properties(property, city_data, writer)
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
 
         
